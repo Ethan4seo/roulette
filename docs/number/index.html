@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>숫자 룰렛 - 번호 뽑기·순서 정하기 | 빙글 룰렛</title>
+<meta name="description" content="시작 번호와 끝 번호만 넣으면 숫자 룰렛이 만들어집니다. 번호 추첨, 발표 순서, 좌석 번호 뽑기를 공정하게 하세요.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="숫자 룰렛 | 빙글 룰렛">
+<meta property="og:description" content="시작 번호와 끝 번호만 넣으면 숫자 룰렛이 만들어집니다. 번호 추첨, 발표 순서, 좌석 번호 뽑기를 공정하게 하세요.">
+<meta property="og:site_name" content="빙글 룰렛">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f0412c">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600&family=Jua&display=swap">
+<link rel="stylesheet" href="../assets/style.css?v=b575c771">
+</head>
+<body data-page="number">
+<header class="top"><div class="wrap"><a class="brand" href="../"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<circle cx="32" cy="34" r="29" fill="#1e2738"/>
+<g transform="translate(32 34)">
+<path d="M0 0 L0 -24 A24 24 0 0 1 20.78 -12 Z" fill="#ff6b57"/>
+<path d="M0 0 L20.78 -12 A24 24 0 0 1 20.78 12 Z" fill="#ffc145"/>
+<path d="M0 0 L20.78 12 A24 24 0 0 1 0 24 Z" fill="#3cc9a8"/>
+<path d="M0 0 L0 24 A24 24 0 0 1 -20.78 12 Z" fill="#5b95ff"/>
+<path d="M0 0 L-20.78 12 A24 24 0 0 1 -20.78 -12 Z" fill="#a487ff"/>
+<path d="M0 0 L-20.78 -12 A24 24 0 0 1 0 -24 Z" fill="#ff8cc6"/>
+<circle r="6" fill="#f0412c" stroke="#1e2738" stroke-width="2.5"/>
+</g>
+<path d="M24 1 H40 V7 L32 17 L24 7 Z" fill="#f0412c"/>
+</svg>
+빙글 룰렛</a><nav class="nav" aria-label="룰렛 종류"><a href="../">룰렛 돌리기</a><a href="../lunch/">점심 메뉴</a><a href="../penalty/">벌칙</a><a href="../number/" aria-current="page">숫자 뽑기</a></nav></div></header>
+<main>
+<section class="hero wrap"><h1>숫자 룰렛</h1><p class="lede">번호 범위만 정하면 끝. 출석 번호, 응모 번호, 발표 순서를 공정하게 뽑아요.</p></section>
+<section class="tool wrap" aria-label="룰렛">
+  <div class="stage">
+    <div class="wheel-box">
+      <canvas id="wheel" role="img" aria-label="룰렛 돌림판"></canvas>
+      <div class="pointer" id="pointer" aria-hidden="true"></div>
+      <button type="button" class="hub" id="hub" aria-label="룰렛 돌리기">돌려!</button>
+    </div>
+    <div class="result" id="result" role="status" aria-live="polite"><span class="label">결과가 여기에 나와요</span></div>
+    <button type="button" class="spin" id="spin">돌리기</button>
+    <p class="hint">컴퓨터에서는 스페이스바로도 돌릴 수 있어요</p>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><label for="items">항목</label><span class="count" id="count">10개</span></div>
+    <div class="range"><label for="from">시작</label><input id="from" type="number" inputmode="numeric" value="1"><label for="to">끝</label><input id="to" type="number" inputmode="numeric" value="10"><button type="button" class="btn" id="fill-range">번호 채우기</button></div>
+    <textarea id="items" spellcheck="false" autocomplete="off">1
+2
+3
+4
+5
+6
+7
+8
+9
+10</textarea>
+    <p class="help">한 줄에 하나씩 적어요. 뒤에 <code>*2</code>를 붙이면 칸과 확률이 두 배가 됩니다. (예: 치킨*2)</p>
+    <div class="chips"><span class="chips-title">빠르게 채우기</span><button type="button" class="chip" data-preset="numbers">숫자 1~10</button><button type="button" class="chip" data-preset="yesno">예 / 아니오</button></div>
+    <div class="opts">
+      <label><input type="checkbox" id="remove-winner"> 당첨된 항목은 빼고 다시 돌리기</label>
+      <label><input type="checkbox" id="sound" checked> 소리 켜기</label>
+    </div>
+    <div class="row"><button type="button" class="btn" id="shuffle">순서 섞기</button><button type="button" class="btn" id="share">이 룰렛 공유</button></div>
+    <input id="share-url" class="btn" type="text" readonly hidden aria-label="공유 링크">
+    <div class="history"><h2>결과 기록 <button type="button" class="link" id="clear-history">지우기</button></h2><ol id="history"></ol></div>
+  </div>
+</section>
+<div class="content wrap">
+  <section><h2>사용 방법</h2><ol class="steps"><li><div><b>번호 범위 넣기</b>&#x27;시작&#x27;과 &#x27;끝&#x27;에 숫자를 넣고 &#x27;번호 채우기&#x27;를 누르세요. 예를 들어 1과 30을 넣으면 1번부터 30번까지 칸이 생깁니다.</div></li><li><div><b>돌리기</b>버튼을 누르면 돌림판이 돌다가 한 번호에서 멈춥니다.</div></li><li><div><b>여러 명 뽑기</b>&#x27;당첨된 항목은 빼고 다시 돌리기&#x27;를 켜면 한 번 뽑힌 번호는 다음 판에서 빠져서 겹치지 않게 차례로 뽑을 수 있습니다.</div></li></ol></section>
+  <section><h2>이럴 때 써요</h2><ul class="uses"><li>반 출석 번호로 발표자 뽑기</li><li>응모 번호로 경품 당첨자 추첨</li><li>자리 번호, 조 번호 정하기</li><li>게임 순서 정하기</li></ul></section>
+  <section class="faq"><h2>자주 묻는 질문</h2><details><summary>같은 번호가 또 나올 수 있나요?</summary><p>&#x27;당첨된 항목은 빼고 다시 돌리기&#x27;를 끄면 매번 모든 번호가 다시 후보가 되므로 같은 번호가 나올 수 있습니다. 겹치지 않게 뽑으려면 켜 두세요.</p></details><details><summary>번호는 몇 개까지 되나요?</summary><p>한 번에 60개까지 넣을 수 있습니다. 그보다 많으면 1~60, 61~120처럼 나눠서 뽑으세요.</p></details><details><summary>결과는 정말 무작위인가요?</summary><p>네. 브라우저에 들어 있는 암호용 난수 생성기(crypto.getRandomValues)로 멈출 자리를 정합니다. 누가 언제 돌려도 각 칸이 뽑힐 확률은 그 칸의 크기에 정확히 비례하고, 이전 결과의 영향을 받지 않습니다.</p></details></section>
+</div>
+</main>
+<footer class="foot"><div class="wrap"><span>© 2026 빙글 룰렛</span><nav><a href="../about/">소개·문의</a><a href="../privacy/">개인정보처리방침</a></nav></div></footer>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script src="../assets/roulette.js?v=b575c771" defer></script>
+</body>
+</html>

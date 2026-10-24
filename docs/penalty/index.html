@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>벌칙 룰렛 - 모임·게임 벌칙 정하기 | 빙글 룰렛</title>
+<meta name="description" content="게임에서 진 사람의 벌칙을 공정하게 정하는 벌칙 룰렛. 웃기지만 무리하지 않은 기본 벌칙이 들어 있고, 우리끼리 벌칙으로 바꿔 쓸 수 있어요.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="벌칙 룰렛 | 빙글 룰렛">
+<meta property="og:description" content="게임에서 진 사람의 벌칙을 공정하게 정하는 벌칙 룰렛. 웃기지만 무리하지 않은 기본 벌칙이 들어 있고, 우리끼리 벌칙으로 바꿔 쓸 수 있어요.">
+<meta property="og:site_name" content="빙글 룰렛">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f0412c">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600&family=Jua&display=swap">
+<link rel="stylesheet" href="../assets/style.css?v=b575c771">
+</head>
+<body data-page="penalty">
+<header class="top"><div class="wrap"><a class="brand" href="../"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<circle cx="32" cy="34" r="29" fill="#1e2738"/>
+<g transform="translate(32 34)">
+<path d="M0 0 L0 -24 A24 24 0 0 1 20.78 -12 Z" fill="#ff6b57"/>
+<path d="M0 0 L20.78 -12 A24 24 0 0 1 20.78 12 Z" fill="#ffc145"/>
+<path d="M0 0 L20.78 12 A24 24 0 0 1 0 24 Z" fill="#3cc9a8"/>
+<path d="M0 0 L0 24 A24 24 0 0 1 -20.78 12 Z" fill="#5b95ff"/>
+<path d="M0 0 L-20.78 12 A24 24 0 0 1 -20.78 -12 Z" fill="#a487ff"/>
+<path d="M0 0 L-20.78 -12 A24 24 0 0 1 0 -24 Z" fill="#ff8cc6"/>
+<circle r="6" fill="#f0412c" stroke="#1e2738" stroke-width="2.5"/>
+</g>
+<path d="M24 1 H40 V7 L32 17 L24 7 Z" fill="#f0412c"/>
+</svg>
+빙글 룰렛</a><nav class="nav" aria-label="룰렛 종류"><a href="../">룰렛 돌리기</a><a href="../lunch/">점심 메뉴</a><a href="../penalty/" aria-current="page">벌칙</a><a href="../number/">숫자 뽑기</a></nav></div></header>
+<main>
+<section class="hero wrap"><h1>벌칙 룰렛</h1><p class="lede">진 사람도 웃으면서 받는 벌칙. 고르는 사람 탓하지 않게 돌림판에 맡기세요.</p></section>
+<section class="tool wrap" aria-label="룰렛">
+  <div class="stage">
+    <div class="wheel-box">
+      <canvas id="wheel" role="img" aria-label="룰렛 돌림판"></canvas>
+      <div class="pointer" id="pointer" aria-hidden="true"></div>
+      <button type="button" class="hub" id="hub" aria-label="룰렛 돌리기">돌려!</button>
+    </div>
+    <div class="result" id="result" role="status" aria-live="polite"><span class="label">결과가 여기에 나와요</span></div>
+    <button type="button" class="spin" id="spin">돌리기</button>
+    <p class="hint">컴퓨터에서는 스페이스바로도 돌릴 수 있어요</p>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><label for="items">항목</label><span class="count" id="count">8개</span></div>
+    
+    <textarea id="items" spellcheck="false" autocomplete="off">노래 한 소절
+성대모사 하나
+커피 사기
+애교 3초
+칭찬 세 마디
+다음 판 깍두기
+엉덩이로 이름 쓰기
+면제 찬스</textarea>
+    <p class="help">한 줄에 하나씩 적어요. 뒤에 <code>*2</code>를 붙이면 칸과 확률이 두 배가 됩니다. (예: 치킨*2)</p>
+    <div class="chips"><span class="chips-title">빠르게 채우기</span><button type="button" class="chip" data-preset="penalty">벌칙</button><button type="button" class="chip" data-preset="names">이름 예시</button><button type="button" class="chip" data-preset="yesno">예 / 아니오</button></div>
+    <div class="opts">
+      <label><input type="checkbox" id="remove-winner"> 당첨된 항목은 빼고 다시 돌리기</label>
+      <label><input type="checkbox" id="sound" checked> 소리 켜기</label>
+    </div>
+    <div class="row"><button type="button" class="btn" id="shuffle">순서 섞기</button><button type="button" class="btn" id="share">이 룰렛 공유</button></div>
+    <input id="share-url" class="btn" type="text" readonly hidden aria-label="공유 링크">
+    <div class="history"><h2>결과 기록 <button type="button" class="link" id="clear-history">지우기</button></h2><ol id="history"></ol></div>
+  </div>
+</section>
+<div class="content wrap">
+  <section><h2>사용 방법</h2><ol class="steps"><li><div><b>벌칙 정하기</b>기본 벌칙 8개가 들어 있습니다. 모임 분위기에 맞게 고치거나 새 벌칙을 한 줄씩 더 적으세요.</div></li><li><div><b>진 사람이 직접 돌리기</b>진 사람이 버튼을 누르게 하면 결과에 대한 불만이 줄어듭니다.</div></li><li><div><b>결과 기록 보기</b>누가 어떤 벌칙을 받았는지 기록에 시간과 함께 남습니다.</div></li></ol></section>
+  <section><h2>벌칙 정할 때 지키면 좋은 것</h2><ul class="uses"><li>모두가 웃을 수 있는 정도로만 정하세요. 누군가 곤란해지는 벌칙은 빼는 게 좋습니다.</li><li>돈이 드는 벌칙은 &#x27;5천 원 이하&#x27;처럼 금액을 미리 정하세요.</li><li>몸이 불편하거나 위험한 벌칙, 억지로 시키는 벌칙은 넣지 않습니다.</li><li>&#x27;면제 찬스&#x27; 같은 칸을 하나 넣으면 분위기가 더 살아납니다.</li></ul></section>
+  <section class="faq"><h2>자주 묻는 질문</h2><details><summary>벌칙을 사람마다 다르게 할 수 있나요?</summary><p>모임마다 저장해 두기는 어렵지만, &#x27;이 룰렛 공유&#x27;로 만든 링크를 즐겨찾기 해 두면 그 벌칙 목록을 언제든 다시 열 수 있습니다.</p></details><details><summary>자주 나왔으면 하는 벌칙이 있어요.</summary><p>그 벌칙 뒤에 *2나 *3을 붙이세요. 칸이 커지는 만큼 당첨 확률도 올라갑니다.</p></details><details><summary>결과는 정말 무작위인가요?</summary><p>네. 브라우저에 들어 있는 암호용 난수 생성기(crypto.getRandomValues)로 멈출 자리를 정합니다. 누가 언제 돌려도 각 칸이 뽑힐 확률은 그 칸의 크기에 정확히 비례하고, 이전 결과의 영향을 받지 않습니다.</p></details></section>
+</div>
+</main>
+<footer class="foot"><div class="wrap"><span>© 2026 빙글 룰렛</span><nav><a href="../about/">소개·문의</a><a href="../privacy/">개인정보처리방침</a></nav></div></footer>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script src="../assets/roulette.js?v=b575c771" defer></script>
+</body>
+</html>
